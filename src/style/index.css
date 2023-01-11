@@ -1,0 +1,15 @@
+@import url('reset.css');
+@import url('btn.css');
+
+#page {
+    border: 1px solid black;
+}
+
+.content {
+    padding: 20px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}

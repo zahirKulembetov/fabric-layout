@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./src/style/index.css">
+    <script src="./src/fabric.js"></script>
+</head>
+<body>
+    <div class="content">
+        <div class="manage-canvas">
+            <input class="btn image-loader-button" type="file" name="imageLoader" />
+            <button class="btn delete-button">Удалить элемент</button>
+            <a href="" class="btn save-as-image">Сохранить как изображение</a>
+            <button class="btn copy-element">Скопировать</button>
+            <button class="btn paste-element">Вставить</button>
+        </div>
+     
+        <div >
+            <canvas width="1440" height="900" id="page"></canvas>
+        </div>
+    </div>
+    <script type="module" src="./src/script.js"></script>
+</body>
+</html>
