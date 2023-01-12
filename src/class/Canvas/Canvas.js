@@ -1,10 +1,9 @@
 //rename to PAGE maybe singleton? because can use without extends Page class
 
-class Fabric {
-    constructor(options) {
-        const {selection} = options;
+class Page {
+    constructor() {
         this.canvas = new fabric.Canvas('page');
-        this.canvas.selection = selection;
+        this.canvas.selection = false;
         this.copiedElement = null;
 
         this.saveAsImageButton = document.querySelector('.save-as-image');
@@ -54,6 +53,14 @@ class Fabric {
         fabric.Image.fromURL(source, (image) => {
             image.set({left, top})
             this.canvas.add(image)
+        })
+        return this;
+    }
+
+    getCanvasAsImage() {
+        return this.canvas.toDataURL({
+            format: 'png',
+            quality: 1
         })
     }
 
@@ -126,4 +133,4 @@ class Fabric {
     }
 }
 
-export default Fabric;
+export default Page;

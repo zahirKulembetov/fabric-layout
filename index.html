@@ -17,9 +17,36 @@
             <button class="btn copy-element">Скопировать</button>
             <button class="btn paste-element">Вставить</button>
         </div>
-     
-        <div >
-            <canvas width="1440" height="900" id="page"></canvas>
+        <div class="page-emulate"> 
+            <div class="page-emulate-main canvas">
+                <canvas width="1440" height="900" id="page"></canvas>
+                <div class="wrapper">
+                    <div class="canvas-list">
+                        <img class="canvas-list-elem canvas-list-elem--active"/>
+                        <img class="canvas-list-elem"/>
+                        <img class="canvas-list-elem"/>
+                    </div>
+                    <button class="btn btn--prev">Prev</button>
+                    <button class="btn btn--next">Next</button>
+                </div>
+            </div>
+            <div class="page-emulate-form">
+                <label for="page-type">Выбрать тип страницы:</label>
+                <select name="page-type" id="page-type">
+                    <option value="">Выбрать тип:</option>
+                    <option value="first">Титульная</option>
+                    <option value="second">ВТОРАЯ</option>
+                    <option value="third">третье</option>
+                    <option value="fourth">4</option>
+                    <option value="fifth">Пятое</option>
+                    <option value="sixth">Шес5ое</option>
+                </select>
+                <div class="form-page">
+                    <form class="form-content">
+                        <button class="btn button-add-page" type="submit">Добавить</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
     <script type="module" src="./src/script.js"></script>

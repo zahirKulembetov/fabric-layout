@@ -14,6 +14,14 @@ class FirstPage {
         return this.typePage;
     }
 
+    static createForm() {
+        const html = `
+            <label for="title">Заголовок:</label>
+            <input type="text" id="title"/>
+        `;
+        return html;
+    }
+
 }
 
 export default FirstPage;
