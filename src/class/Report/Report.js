@@ -3,21 +3,23 @@ import FirstPage from "../TypePage/FirstPage.js";
 class Report {
     #typePageOption = null;
     #form = null;
-    constructor() {
+    constructor(pageFactory) {
         this.pages = [];
         this.typePage = document.querySelector('#page-type');
         this.#form = document.querySelector('.form-page .form-content');
-
         this.typePage.addEventListener('change', this.#detectTypePage);
         this.#form.addEventListener('submit', this.#addPage);
+        this.pageFactory = pageFactory;
     }
 
     #addPage = (e) => {
         e.preventDefault();
-        console.log(Object.fromEntries(new FormData(e.target)))
-        if(!this.#typePageOption) return alert('NONONO -> Выберите тип страницы...')
-        
-        console.log(this.#typePageOption)
+        console.log(Object.fromEntries(new FormData(e.target)));
+        if(!this.#typePageOption) return alert('NONONO -> Выберите тип страницы...');
+        const page = this.pageFactory.create(this.#typePageOption);
+        page.build();
+        this.pages.push(page);
+        console.log(page.canvas.saveAsJSON());
     }
 
     getPages() {
@@ -32,7 +34,7 @@ class Report {
         const value = e.target.value;
         if(!value) return
         this.#typePageOption = e.target.value;
-        const form = FirstPage.createForm();;
+        const form = FirstPage.createForm();
         this.#addFormToDOM(form);
     }
 
@@ -41,6 +43,8 @@ class Report {
         console.log(Object.fromEntries(new FormData(e.target)))
         // console.log(e.target)
     }
+
+    
 
   
 }

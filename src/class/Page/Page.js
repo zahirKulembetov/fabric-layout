@@ -1,7 +1,7 @@
-import Page from "../Canvas/Canvas.js";
+import canvasCreator from "../Canvas/Canvas.js";
 import dateUtils from "../utils/date.js"
 
-class PageI extends Page {
+class PageI extends canvasCreator {
     constructor(content) {
         super()
         const {title} = content;

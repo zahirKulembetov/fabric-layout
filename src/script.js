@@ -1,7 +1,7 @@
 // import Fabric from "./class/Canvas/Canvas.js";
-import PageI from "./class/Page/Page.js";
 import Slider from "./class/Slider/Slider.js";
 import Report from "./class/Report/Report.js";
+import pageFactory from "./class/Page/PageFactory.js"
 
 document.addEventListener('DOMContentLoaded', () => {
     const slider = new Slider({
@@ -10,16 +10,16 @@ document.addEventListener('DOMContentLoaded', () => {
         buttonNext: '.btn--next',
         activeClass: 'canvas-list-elem--active'
     });
-    const report = new Report();
-    const page = new PageI({
-        title: {
-            text: 'ОТЧЁТ О\nПОИСКОВОМ\nПРОДВИЖЕНИИ',
-            left: 40,
-            top: 343, 
-            fill: '#3e2e88', 
-            fontSize: 60 
-        }
-    });
+    const report = new Report(pageFactory);
+    // const page = new PageI({
+    //     title: {
+    //         text: 'ОТЧЁТ О\nПОИСКОВОМ\nПРОДВИЖЕНИИ',
+    //         left: 40,
+    //         top: 343, 
+    //         fill: '#3e2e88', 
+    //         fontSize: 60 
+    //     }
+    // });
     slider.onChangeSlide((activeSlideIdx, activeSlide, prevSlide) => {
         prevSlide.src = page.getCanvasAsImage();
     })

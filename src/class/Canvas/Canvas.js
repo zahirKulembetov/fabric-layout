@@ -1,18 +1,23 @@
 //rename to PAGE maybe singleton? because can use without extends Page class
 
-class Page {
+class Canvas {
+    #callbacks;
     constructor() {
         this.canvas = new fabric.Canvas('page');
         this.canvas.selection = false;
         this.copiedElement = null;
 
         this.saveAsImageButton = document.querySelector('.save-as-image');
+        this.saveAsJsonButton = document.querySelector('.save-as-json');
+
         this.deleteElementButton = document.querySelector('.delete-button');
         this.imageLoaderButton = document.querySelector('.image-loader-button');
         this.copyElementButton = document.querySelector('.copy-element');
         this.pasteElementButton = document.querySelector('.paste-element');
 
         this.saveAsImageButton.addEventListener('click', this.#saveAsImage);
+        this.saveAsJsonButton.addEventListener('click', this.saveAsJSON);
+
         this.deleteElementButton.addEventListener('click', this.#deleteElement);
         this.imageLoaderButton.addEventListener('change', this.#uploadImage);
         this.copyElementButton.addEventListener('click', this.#copyElement);
@@ -63,7 +68,6 @@ class Page {
             quality: 1
         })
     }
-
 
     //CALLBACK
 
@@ -127,10 +131,11 @@ class Page {
             this.#pasteElement();
         }
     }
-
-    #saveAsJSON = () => {
-
+//https://stackoverflow.com/questions/51434198/include-image-data-in-json-fabricjs
+    saveAsJSON = () => {
+        console.log(this.canvas.getObjects())
+        return this.canvas.toJSON();
     }
 }
-
-export default Page;
+const canvasCreator = new Canvas();
+export default canvasCreator;
