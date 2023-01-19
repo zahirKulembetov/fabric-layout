@@ -1,10 +1,9 @@
 import dateUtils from "../utils/date.js";
 
-class FirstPage {
+class First {
     constructor(canvas) {
         this.typePage = null;
         this.canvas = canvas;
-        console.log(canvas)
     }
 
     /**
@@ -41,4 +40,4 @@ class FirstPage {
 
 }
 
-export default FirstPage;
+export default First;

@@ -1,16 +1,17 @@
-import FirstPage from "../TypePage/FirstPage.js";
+import First from "../TypePage/First.js";
 import constant from "../../constant/constant.js"
 import canvasCreator from "../Canvas/Canvas.js";
+import MainResult from "../TypePage/MainResult.js";
 
 class PageFactory {
     create(type) {
         let page;
         switch(type) {
             case constant.FIRST:
-                page = new FirstPage(canvasCreator);
+                page = new First(canvasCreator);
                 break;
             case constant.TITLE:
-                page = new FirstPage(canvasCreator);
+                page = new MainResult(canvasCreator);
                 break;
             default:
                 break;

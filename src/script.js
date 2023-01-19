@@ -11,20 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
         activeClass: 'canvas-list-elem--active'
     });
     const report = new Report(pageFactory);
-    // const page = new PageI({
-    //     title: {
-    //         text: 'ОТЧЁТ О\nПОИСКОВОМ\nПРОДВИЖЕНИИ',
-    //         left: 40,
-    //         top: 343, 
-    //         fill: '#3e2e88', 
-    //         fontSize: 60 
-    //     }
-    // });
+
     slider.onChangeSlide((activeSlideIdx, activeSlide, prevSlide) => {
-        prevSlide.src = page.getCanvasAsImage();
+        report.JSONToCanvas(activeSlideIdx); //rename function and rewrite with two type: edit and add
     })
-    // const page = new Page({selection: false});
-    // const FabricInstance = new Fabric({selection: false});
-    // page.addShape({type: 'rect', width: 200, height: 200, left: 50, top: 50, fill: '#3e2e88'})
-    // page.addText({text: `ОТЧЁТ О\nПОИСКОВОМ\nПРОДВИЖЕНИИ`, left: 40, top: 343, fill: '#3e2e88', fontSize: 60});
+
+    report.onSavePage((page) => {
+        slider.addSlide();
+    })
+
 })

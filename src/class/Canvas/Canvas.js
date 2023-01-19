@@ -5,6 +5,7 @@ class Canvas {
     constructor() {
         this.canvas = new fabric.Canvas('page');
         this.canvas.selection = false;
+
         this.copiedElement = null;
 
         this.saveAsImageButton = document.querySelector('.save-as-image');
@@ -61,6 +62,13 @@ class Canvas {
         })
         return this;
     }
+    
+    getImage() {
+        return  this.canvas.toDataURL({
+            format: 'png',
+            quality: 1
+        });
+    }
 
     getCanvasAsImage() {
         return this.canvas.toDataURL({
@@ -77,6 +85,17 @@ class Canvas {
         console.log(this.canvas.getActiveObject())
         const copyActiveElement = fabric.util.object.clone(activeElement);
         this.copiedElement = copyActiveElement;
+    }
+
+    #extendFabricImageToObject = () => {
+        // fabric.Image.prototype.toDatalessObject = fabric.Image.prototype.toObject;
+        // fabric.Image.prototype.toObject = (function(toObject) {
+        //     return function() {
+        //       return fabric.util.object.extend(toObject.call(this), {
+        //         src: this.toDataURL()
+        //       });
+        //     };
+        //   })(fabric.Image.prototype.toObject);
     }
 
 
@@ -135,6 +154,20 @@ class Canvas {
     saveAsJSON = () => {
         console.log(this.canvas.getObjects())
         return this.canvas.toJSON();
+    }
+
+    JSONToCanvas = (json) => {
+        this.canvas.loadFromJSON(json, () => {
+            console.log('render')
+            this.canvas.renderAll();
+        }, (o, obj) => {
+            console.log(o)
+            console.log(obj)
+        })
+    }
+
+    clear = () => {
+        this.canvas.clear()
     }
 }
 const canvasCreator = new Canvas();

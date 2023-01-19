@@ -32334,3 +32334,13 @@ fabric.util.object.extend(fabric.IText.prototype, /** @lends fabric.IText.protot
 
   /** ERASER_END */
 })();
+
+
+fabric.Image.prototype.toDatalessObject = fabric.Image.prototype.toObject;
+fabric.Image.prototype.toObject = (function(toObject) {
+    return function() {
+      return fabric.util.object.extend(toObject.call(this), {
+        src: this.toDataURL()
+      });
+    };
+  })(fabric.Image.prototype.toObject);

@@ -1,6 +1,8 @@
 class Slider {
     #callbacks = null;
     #prevSlide = null;
+    #sliderContainerClass = null;
+
     constructor(options) {
         const {slider:sliderClass, buttonNext: buttonNextClass, buttonPrev: buttonPrevClass, activeClass} = options;
         this.slider = document.querySelector(sliderClass);
@@ -13,8 +15,16 @@ class Slider {
 
         this.#callbacks = {};
         this.#setActiveSlideElem(this.activeSlide);
+        this.#sliderContainerClass = sliderClass;
+
         this.nextButton.addEventListener('click', this.#toNextSlide);
         this.prevButton.addEventListener('click', this.#toPrevSlide);
+        this.slider.addEventListener('click', this.#handlerSliderListener)
+    }
+
+    addSlide() {
+        this.#addNodeToNode();
+        this.#toNextSlide();
     }
 
     getActiveSlide() {
@@ -40,6 +50,26 @@ class Slider {
     }
 
 
+    #addNodeToNode() {
+        const nodeImg = document.createElement('img');
+        nodeImg.classList.add('canvas-list-elem');
+        this.sliderElem.push(nodeImg);
+        this.slider.appendChild(nodeImg);
+        this.countElemOfSlider =  this.sliderElem.length - 1;
+        nodeImg.setAttribute('data-page', this.countElemOfSlider);
+    }
+
+    #handlerSliderListener = (e) => {
+        const target = e.target;
+        const isContainer = target.classList.contains(this.#sliderContainerClass.slice(1));
+        if(!isContainer) {
+            const numberPage = +target.getAttribute('data-page');
+            if(numberPage !== this.activeSlide) { // if not same page
+                this.#goToSlide(numberPage);
+            }
+        } 
+    }
+
     #setActiveSlideElem(numberSlide) {
         this.sliderElem[numberSlide].classList.add(this.activeClass);
     }
@@ -48,7 +78,16 @@ class Slider {
         this.sliderElem[numberSlide].classList.remove(this.activeClass);
     }
 
+    #goToSlide(idx) {
+        this.#setInActiveSlideElem(this.activeSlide);
+        //prev slide set if need
+        this.setActiveSlide(idx);
+        this.#setActiveSlideElem(idx);
+        this.#executeCallbacks('change-slide');
+    }
+
     #toNextSlide = () => {
+        if(!this.countElemOfSlider) return
         this.#setInActiveSlideElem(this.activeSlide);
         this.#prevSlide = this.activeSlide;
         if(this.activeSlide === this.countElemOfSlider) {
@@ -61,6 +100,7 @@ class Slider {
     }
 
     #toPrevSlide = () => {
+        if(!this.countElemOfSlider) return
         this.#setInActiveSlideElem(this.activeSlide);
         this.#prevSlide = this.activeSlide;
         if(this.activeSlide === 0) {

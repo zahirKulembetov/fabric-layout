@@ -23,9 +23,7 @@
                 <canvas width="1440" height="900" id="page"></canvas>
                 <div class="wrapper">
                     <div class="canvas-list">
-                        <img class="canvas-list-elem canvas-list-elem--active"/>
-                        <img class="canvas-list-elem"/>
-                        <img class="canvas-list-elem"/>
+                        <img data-page="0" class="canvas-list-elem"/>
                     </div>
                     <button class="btn btn--prev">Prev</button>
                     <button class="btn btn--next">Next</button>
@@ -36,16 +34,18 @@
                 <select name="page-type" id="page-type">
                     <option value="">Выбрать тип:</option>
                     <option value="first">Титульная</option>
-                    <option value="second">ВТОРАЯ</option>
-                    <option value="third">третье</option>
-                    <option value="fourth">4</option>
-                    <option value="fifth">Пятое</option>
-                    <option value="sixth">Шес5ое</option>
+                    <option value="title">Главные результаты</option>
+                    <option value="table">Таблица</option>
+                    <option value="graphic">График</option>
+                    <option value="summary">Резюме</option>
+                    <option value="bonus">Бонус</option>
                 </select>
                 <div class="form-page">
                     <form class="form-content">
-                        <button class="btn button-add-page" type="submit">Добавить</button>
+                        <button class="btn button-add-page" type="submit">Выбрать</button>
                     </form>
+                    <button class="btn button-save-page" type="button">Сохранить</button>
+                    <button class="btn button-save-changes" type="button">Сохранить изменения</button>
                 </div>
             </div>
         </div>
