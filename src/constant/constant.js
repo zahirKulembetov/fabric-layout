@@ -4,5 +4,6 @@ export default {
     TABLE: 'table',
     GRAPHIC: 'graphic',
     SUMMARY: 'summary',
-    BONUS: 'bonus'
+    BONUS: 'bonus',
+    RESULT_IN_DIGITS: 'resultindigits'
 }

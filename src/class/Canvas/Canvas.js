@@ -29,8 +29,8 @@ class Canvas {
 
 
     addText(options) {
-        const {text, left, top, fill, fontSize} = options;
-        const textForCanvas = new fabric.Text(text, {left, top, fill, fontSize});
+        const {text, left, top, fill, fontSize, textAlign, width} = options;
+        const textForCanvas = new fabric.Textbox(text, {left, top, fill, fontSize, textAlign: textAlign ? textAlign: 'left', width: width ? width : 1440});
         this.canvas.add(textForCanvas);
         return this;
     }
