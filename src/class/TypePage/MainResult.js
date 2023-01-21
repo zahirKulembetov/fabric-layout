@@ -1,19 +1,10 @@
-class MainResult {
+import Page from "../Page/Page.js";
+
+class MainResult extends Page {
     constructor(canvas) {
-        this.typePage = null;
-        this.canvas = canvas;
+        super(canvas)
     }
 
-    /**
-     * @param {string} type
-     */
-    set type(type) {
-        this.typePage = type;
-    }
-
-    get type() {
-        return this.typePage;
-    }
 
 
     build() {
@@ -22,7 +13,7 @@ class MainResult {
             .addText({text: 'ОТЧЁТ О ПОИСКОВОМ ПРОДВИЖЕНИИ', left: 500, top: 430, fill: '#ffffff', fontSize: 28})
     }
 
-    static createForm() {
+    createForm() {
         const html = `
             <label for="title">Заголовок:</label>
             <input type="text" id="title"/>

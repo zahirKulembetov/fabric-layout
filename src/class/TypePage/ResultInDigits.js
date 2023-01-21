@@ -1,18 +1,8 @@
-class ResultInDigits {
+import Page from "../Page/Page.js";
+
+class ResultInDigits extends Page {
     constructor(canvas) {
-        this.typePage = null;
-        this.canvas = canvas;
-    }
-
-    /**
-     * @param {string} type
-     */
-    set type(type) {
-        this.typePage = type;
-    }
-
-    get type() {
-        return this.typePage;
+        super(canvas)
     }
 
 
@@ -23,7 +13,7 @@ class ResultInDigits {
             .addText({text: 'Выполнено коммерческий целей в прошлом месяце', left: 40, top: 650, fill: '#000', fontSize: 18,  textAlign: 'center'})
     }
 
-    static createForm() {
+    createForm() {
         const html = `
             <label for="title">Заголовок:</label>
             <input type="text" id="title"/>

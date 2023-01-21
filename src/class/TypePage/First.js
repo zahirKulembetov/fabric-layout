@@ -1,9 +1,9 @@
+import Page from "../Page/Page.js";
 import dateUtils from "../utils/date.js";
 
-class First {
+class First extends Page {
     constructor(canvas) {
-        this.typePage = null;
-        this.canvas = canvas;
+        super(canvas);
     }
 
     /**
@@ -19,6 +19,8 @@ class First {
 
 
     build() {
+        this.addLogo();
+        this.addTitle('TITLE');
         this.canvas
             .addText({text: 'ОТЧЁТ О\nПОИСКОВОМ\nПРОДВИЖЕНИИ', left: 40, top: 343, fill: '#3e2e88', fontSize: 60})
             .addImage({source: "src/image/orange-block.png", left: 800, top: 730})
@@ -30,9 +32,9 @@ class First {
             .addText({text: dateUtils.getFullDate(), left: 1300, top: 40, fill: '#3e2e88', fontSize: 24})
     }
 
-    static createForm() {
+    createForm() {
         const html = `
-            <label for="title">Заголовок:</label>
+            <label for="title">Титульная:</label>
             <input type="text" id="title"/>
         `;
         return html;

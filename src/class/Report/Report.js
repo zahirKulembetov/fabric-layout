@@ -18,7 +18,6 @@ class Report {
         this.#saveChangesButton = document.querySelector('.button-save-changes');
 
         this.#typePage.addEventListener('change', this.#detectTypePage);
-        this.#form.addEventListener('submit', this.#choosePage);
         this.#savePageButton.addEventListener('click', this.#savePageHandler);
         this.#saveChangesButton.addEventListener('click', this.#editPage);
         
@@ -26,12 +25,11 @@ class Report {
         this.pageFactory = pageFactory;
     }
 
-    #choosePage = (e) => {
-        e.preventDefault();
+    #choosePage = () => {
         if(this.#currentPage) {
             this.#clearCanvas();
         }
-        console.log(Object.fromEntries(new FormData(e.target))); //data from form
+        // console.log(Object.fromEntries(new FormData(e.target))); //data from form
         if(!this.#typePageOption) return alert('NONONO -> Выберите тип страницы...');
         this.#currentPage = this.pageFactory.create(this.#typePageOption);
         this.#currentPage.build();
@@ -48,8 +46,9 @@ class Report {
 
     #saveChanges = () => {
         const pageJson = this.#currentPage.canvas.saveAsJSON();
-        this.#currentPage['JSON'] = JSON.stringify(pageJson);
-        this.#currentPage['image'] = this.#getImagePage();
+        this.#currentPage.json = JSON.stringify(pageJson);
+        this.#currentPage.image = this.#getImagePage();
+        console.log(this.#currentPage)
     }
 
     #savePageHandler = (e) => {
@@ -61,9 +60,7 @@ class Report {
         //Clear canvas and go next slide if page doesn't exist
         //If page exist, can edit page and save
         this.#saveChanges();
-
         this.pages.push(this.#currentPage);
-        this.pages.forEach(page => console.log(page === this.#currentPage))
         this.#executeCallbacks('save');
         this.#currentPage = null;
     }
@@ -73,7 +70,7 @@ class Report {
         const page = this.pages[id];
         if(page) {
             this.#currentPage = page;
-            const json = JSON.parse(page['JSON']);
+            const json = JSON.parse(this.#currentPage.json);
             page.canvas.JSONToCanvas(json);    
         } else {
             this.#clearCanvas();
@@ -117,8 +114,12 @@ class Report {
     #detectTypePage = (e) => {
         const value = e.target.value;
         if(!value) return
+        this.#clearFormContainer();
         this.#typePageOption = e.target.value;
-        const form = FirstPage.createForm();
+        //before create form check if page exist pass params to init else default init
+        console.log(this.#typePageOption)
+        this.#choosePage()
+        const form = this.#currentPage.createForm();
         this.#addFormToDOM(form);
     }
 
@@ -126,6 +127,11 @@ class Report {
         e.preventDefault();
         console.log(Object.fromEntries(new FormData(e.target)))
         // console.log(e.target)
+    }
+
+    #clearFormContainer() {
+        const children = Array.from(this.#form.children);
+        children.forEach(child => child.remove())
     }
 
     

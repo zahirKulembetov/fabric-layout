@@ -1,6 +1,6 @@
 //rename to PAGE maybe singleton? because can use without extends Page class
 
-class Canvas {
+export class Canvas {
     #callbacks;
     constructor() {
         this.canvas = new fabric.Canvas('page');
@@ -30,7 +30,7 @@ class Canvas {
 
     addText(options) {
         const {text, left, top, fill, fontSize, textAlign, width} = options;
-        const textForCanvas = new fabric.Textbox(text, {left, top, fill, fontSize, textAlign: textAlign ? textAlign: 'left', width: width ? width : 1440});
+        const textForCanvas = new fabric.Textbox(text, {left, top, fill: fill ?? '#000', fontSize: fontSize ?? 16, textAlign: textAlign ?? 'left', width: width ?? 1440});
         this.canvas.add(textForCanvas);
         return this;
     }
@@ -52,10 +52,11 @@ class Canvas {
     addTable() {
 
     }
+    
+    
 
     addImage(options) {
         const {source, left, top} = options;
-        console.log(source)
         fabric.Image.fromURL(source, (image) => {
             image.set({left, top})
             this.canvas.add(image)
@@ -170,5 +171,6 @@ class Canvas {
         this.canvas.clear()
     }
 }
+
 const canvasCreator = new Canvas();
 export default canvasCreator;
