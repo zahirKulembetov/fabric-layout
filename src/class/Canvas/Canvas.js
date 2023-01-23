@@ -99,6 +99,22 @@ export class Canvas {
         //   })(fabric.Image.prototype.toObject);
     }
 
+    // implementation
+    addGraphic(options) {
+        this.#drawCoordSystem();
+        this.#addColumn();
+        this.#addText();
+    }
+
+    // implementation
+    addTable(options) {
+        this.#addRow();
+    }
+
+     // implementation
+    addList(options) {
+
+    }
 
     #pasteElement = (e) => {
         if(!this.copiedElement) return
@@ -141,7 +157,7 @@ export class Canvas {
     }
 
     #keyPress = (e) => {
-        if(e.keyCode === 46 || e.keyCode === 8) {
+        if(e.keyCode === 46) {
             this.#deleteElement();
         }
         if(e.ctrlKey && e.keyCode === 67) {

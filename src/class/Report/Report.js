@@ -48,7 +48,7 @@ class Report {
         const pageJson = this.#currentPage.canvas.saveAsJSON();
         this.#currentPage.json = JSON.stringify(pageJson);
         this.#currentPage.image = this.#getImagePage();
-        console.log(this.#currentPage)
+        console.log(pageJson)
     }
 
     #savePageHandler = (e) => {

@@ -18,9 +18,10 @@ class First extends Page {
     }
 
 
-    build() {
-        this.addLogo();
-        this.addTitle('TITLE');
+    build(formData) {
+        console.log(Object.fromEntries(new FormData(formData)));
+        // this.addLogo();
+        // this.addTitle('TITLE');
         this.canvas
             .addText({text: 'ОТЧЁТ О\nПОИСКОВОМ\nПРОДВИЖЕНИИ', left: 40, top: 343, fill: '#3e2e88', fontSize: 60})
             .addImage({source: "src/image/orange-block.png", left: 800, top: 730})
@@ -34,8 +35,15 @@ class First extends Page {
 
     createForm() {
         const html = `
-            <label for="title">Титульная:</label>
-            <input type="text" id="title"/>
+            <div class="form-element">
+                <label for="title">Заголовок:</label>
+                <input type="text" id="title"/>
+            </div>
+            <div class="form-element">
+                <label for="company">Компания:</label>
+                <input type="text" id="company"/>
+            </div>
+           
         `;
         return html;
     }
