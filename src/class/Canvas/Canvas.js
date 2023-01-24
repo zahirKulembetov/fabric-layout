@@ -1,3 +1,5 @@
+import constant from "../../constant/constant.js";
+
 //rename to PAGE maybe singleton? because can use without extends Page class
 
 export class Canvas {
@@ -24,12 +26,14 @@ export class Canvas {
         this.copyElementButton.addEventListener('click', this.#copyElement);
         this.pasteElementButton.addEventListener('click', this.#pasteElement)
         window.addEventListener('keydown', this.#keyPress)
+
+        this.addGraphic();
     }
 
 
 
     addText(options) {
-        const {text, left, top, fill, fontSize, textAlign, width} = options;
+        const {text, left, top, fill, fontSize, textAlign, width, height} = options;
         const textForCanvas = new fabric.Textbox(text, {left, top, fill: fill ?? '#000', fontSize: fontSize ?? 16, textAlign: textAlign ?? 'left', width: width ?? 1440});
         this.canvas.add(textForCanvas);
         return this;
@@ -44,15 +48,6 @@ export class Canvas {
         }))
         return this;
     }
-
-    addGraphic() {
-
-    }
-
-    addTable() {
-
-    }
-    
     
 
     addImage(options) {
@@ -102,18 +97,115 @@ export class Canvas {
     // implementation
     addGraphic(options) {
         this.#drawCoordSystem();
-        this.#addColumn();
-        this.#addText();
+        // maxValue, countElements
+        this.#addSeparatorToOY(7000, 7);
+        this.#addColumn(7000, 7);
+        // this.#addText();
     }
+
+    addLine() {
+
+    }
+    
 
     // implementation
     addTable(options) {
-        this.#addRow();
+        // this.#addRow();
     }
 
      // implementation
     addList(options) {
 
+    }
+
+    #addSeparatorToOY(maxValue, countElements) {
+        //HEIGHT_OF_GRAPHIC
+        const step = Math.floor( constant.HEIGHT_OF_GRAPHIC / countElements);
+        const numberToStep = Math.round(maxValue / countElements);
+        for(let i = 0; i <= countElements; i++) {
+            const currentNumber = numberToStep * i;
+            // {text, left, top, fill, fontSize, textAlign, width}
+            this.addText({text: `${currentNumber}`, left: 30, top: constant.HEIGHT_OF_GRAPHIC + constant.START_GRAPHIC_Y - (step * i), width: 30, textAlign: 'right'}); 
+            this.canvas.add(new fabric.Line([0, 100, constant.WIDTH_OF_GRAPHIC - 40, 100], {
+                left: 70,
+                top: constant.HEIGHT_OF_GRAPHIC + constant.START_GRAPHIC_Y - (step * i),
+                stroke: '#D5CCFE',
+                strokeWidth: 2
+            }))
+        }
+    }
+
+    #addColumn(maxValue, countElements) {
+        let startX = 80;
+        const data = [
+            {
+                value:2794,
+                date: 'Январь'
+            },
+            {
+                value: 4049,
+                date: 'Февраль'
+            },
+            {
+                value: 5732,
+                date: 'Март'
+            },
+        ]
+        const margin = 70;
+        const height = constant.HEIGHT_OF_GRAPHIC;
+        //coef for relation px
+        console.log(data.length)
+        const stepH = height / maxValue;
+        const marginStep = margin  / data.length;
+        //minus left part before start coords
+        const widthElem = (constant.WIDTH_OF_GRAPHIC - margin - 60) / (data.length);
+        // {type, width, height, left, top, fill} \
+       
+        // this.addShape({type: 'rect', width: widthElem, height: 200 * stepH, left: 80 + widthElem + 10, top: constant.HEIGHT_OF_GRAPHIC + constant.START_GRAPHIC_Y - 200 * stepH, fill: '#3e2e88'})
+        for(let i = 0; i < data.length; i++) {
+            const value = data[i].value * stepH;
+            this.addShape({type: 'rect', width: widthElem, height: value, left: startX, top: constant.HEIGHT_OF_GRAPHIC + constant.START_GRAPHIC_Y - value, fill: '#3e2e88'});
+            this.#addTextUnderColumn({text: data[i].date, width: widthElem, left: startX, top: constant.HEIGHT_OF_GRAPHIC + constant.START_GRAPHIC_Y });
+            //center for inside element
+            this.#addTextIntoColumn({text: data[i].date, width: widthElem, left: startX, top: value })
+            startX += widthElem + marginStep;
+        }
+    
+    }
+
+    #addTextUnderColumn(options) {
+        const {text, width, left, top} = options;
+        this.addText({text, width, left, top, textAlign: 'center', fontSize: 20});
+    }
+
+    #addTextIntoColumn(options) {
+        const {text, width, left, top} = options;
+        this.addText({text, width, left, top, textAlign: 'center', fontSize: 20});
+    }
+
+    #drawCoordSystem(options) {
+        // const {x, y} = options;
+        //x y x1 y1
+        //constant.HEIGHT_OF_GRAPHIC + 100 
+        //Начало координат сверху вниз, поэтому от точки с x y задаем длину, поэтому необходимо учитывать отступ сверху 
+        const group = new fabric.Group();
+        console.log(group)
+        const OX = new fabric.Line([0, 100, constant.WIDTH_OF_GRAPHIC - 30, 100], {
+            left: 80,
+            top: constant.HEIGHT_OF_GRAPHIC + constant.START_GRAPHIC_Y,
+            stroke: '#D5CCFE',
+            strokeWidth: 2
+        })
+
+        const OY = new fabric.Line([0, 0, 0, constant.HEIGHT_OF_GRAPHIC], {
+            left: 80,
+            top: constant.START_GRAPHIC_Y,
+            stroke: '#D5CCFE',
+            strokeWidth: 2
+        })
+        group.add(OX)
+        group.addWithUpdate(OY);
+        this.canvas.add(group);
     }
 
     #pasteElement = (e) => {
