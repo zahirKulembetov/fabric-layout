@@ -6,8 +6,8 @@ export default {
     SUMMARY: 'summary',
     BONUS: 'bonus',
     RESULT_IN_DIGITS: 'resultindigits',
-    HEIGHT_OF_GRAPHIC: 565,
-    WIDTH_OF_GRAPHIC: 1400,
-    START_GRAPHIC_Y: 80,
+    HEIGHT_OF_GRAPHIC: 450,
+    WIDTH_OF_GRAPHIC: 1360,
+    START_GRAPHIC_Y: 140,
     // START_GRAPHIC_X: 750
 }

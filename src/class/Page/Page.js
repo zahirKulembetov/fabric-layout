@@ -1,17 +1,10 @@
-import { Canvas } from "../Canvas/Canvas.js";
-
-
 
 class Page {
-    /**
-     * 
-     * @param {Canvas} canvas 
-     */
-    constructor(canvas) {
+    constructor() {
         this.image = null;
         this.json = null;
-        this.canvas = canvas;
         this.typePage = null;
+        this.info = {};
     }
 
 
@@ -37,24 +30,6 @@ class Page {
 
     setType(type) {
         this.typePage = type;
-    }
-
-    addLogo() {
-        this.canvas
-            .addImage({source: 'src/image/lzmedia.png', left: 1160, top: 40});
-    }
-
-    addTitle(title) {
-        this.canvas
-            .addText({text: title, left: 40, top: 40})
-    }
-
-    addNumber() {
-
-    }
-    
-    build() {      
-
     }
 
 }

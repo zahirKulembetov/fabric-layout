@@ -1,16 +1,14 @@
 import Page from "../Page/Page.js";
 
 class MainResult extends Page {
-    constructor(canvas) {
-        super(canvas)
+    constructor() {
+        super()
+        this.build();
     }
 
-
-
     build() {
-        this.canvas
-            .addShape({type: 'rect', width: 1440, height: 900, left: 0, top: 0, fill: '#3e2e88', selectable: false})
-            .addText({text: 'ОТЧЁТ О ПОИСКОВОМ ПРОДВИЖЕНИИ', left: 40, top: 430, fill: '#ffffff', fontSize: 28, textAlign: 'center'})
+        this.info['figure'] = [{type: 'rect', width: 1440, height: 900, left: 0, top: 0, fill: '#3e2e88', selectable: false}];
+        this.info['text'] = [{text: 'ОТЧЁТ О ПОИСКОВОМ ПРОДВИЖЕНИИ', left: 40, top: 430, fill: '#ffffff', fontSize: 28, textAlign: 'center'}];
     }   
 
     createForm() {

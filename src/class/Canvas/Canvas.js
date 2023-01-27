@@ -6,7 +6,8 @@ import constant from "../../constant/constant.js";
 //Text on graphic under column with angle
 //Add empty page with functions for custom create page
 //Add layout with orange blocks and user choice
-
+//Class Canvas panel !!!!
+//Class canvas only contains draw methods other methods include cavnas panel!!!
 export class Canvas {
     #callbacks;
     constructor() {
@@ -33,16 +34,6 @@ export class Canvas {
         window.addEventListener('keydown', this.#keyPress)
 
         // this.addGraphic();
-        this.addTable({
-            percentMainColumn: 70, 
-            rows: [
-                {texts: ['Запрос', '1.11.2021', '1.12.2021']},
-                {texts: ['аренда автокрана в щелково', '1', '2']},
-                {texts: ['автовышка телескопическая аренда', '1', '2']},
-                {texts: ['манипулятор 10 тонн аренда москва', '1', '2']},
-                {texts: ['аренда автовышки 20 метров', '1', '2']}
-            ]
-        });
         // this.addList({texts: ['Прописали теги alt на всех страницах «Базы знаний» и блога', 'Подобрали семантику и оптимизировали статью по монетизации мобильных игр', `Подготовили файлы с распределением запросов по страницам сайта и тегами title и description: https://docs.google.com/spreadsheets/d/1u4bVXjlaLP5DPRHDJl6NyJeAb2AI6GT9507koKNtWE8/edit?usp=sharing https://docs.google.com/spreadsheets/d/1a61hboAqDnfvcCHthUa9BcJBZMblCBlirjeTHz_j86M/edit?usp=sharing
         // ` ], left: 40, top: 200, startNumber: 2, marked: true});
     }
@@ -50,30 +41,38 @@ export class Canvas {
 
 
     addText(options) {
-        const {text, left, top, fill, fontSize, textAlign, width, height} = options;
-        const textForCanvas = new fabric.Textbox(text, {left, top, fill: fill ?? '#000', fontSize: fontSize ?? 16, textAlign: textAlign ?? 'left', width: width ?? 1360});
+        const {text, left, top, fill, fontSize, textAlign, width, height, angle = 0} = options;
+        const textForCanvas = new fabric.Textbox(text, {left, top, fill: fill ?? '#000', fontSize: fontSize ?? 16, textAlign: textAlign ?? 'left', width: width ?? 1360, angle});
         this.canvas.add(textForCanvas);
         return this;
     }
 
 
     addShape(options) {
-        console.log(options)
-        const {type, width, height, left, top, fill, selectable = true} = options;
+        const {type, width, height, left, top, fill, selectable = true, back = true} = options;
         if(type === 'rect') {
-            this.canvas.add(new fabric.Rect({
+            const rect = new fabric.Rect({
                 width, height, left, top, fill, selectable
-            }))
+            });
+            this.canvas.add(rect)
+            if(back) this.canvas.sendToBack(rect);
         } 
         return this;
     }
     
 
     addImage(options) {
-        const {source, left, top} = options;
+        const {source, left = 0, top = 0, width, height, back = false} = options;
         fabric.Image.fromURL(source, (image) => {
             image.set({left, top})
+            if(width) {
+                image.scaleToWidth(width);
+            }
+            if(height) {
+                image.scaleToHeight(height);
+            }
             this.canvas.add(image)
+            if(back) this.canvas.sendToBack(image)
         })
         return this;
     }
@@ -102,18 +101,7 @@ export class Canvas {
         this.copiedElement = copyActiveElement;
     }
 
-    #extendFabricImageToObject = () => {
-        // fabric.Image.prototype.toDatalessObject = fabric.Image.prototype.toObject;
-        // fabric.Image.prototype.toObject = (function(toObject) {
-        //     return function() {
-        //       return fabric.util.object.extend(toObject.call(this), {
-        //         src: this.toDataURL()
-        //       });
-        //     };
-        //   })(fabric.Image.prototype.toObject);
-    }
 
-    // implementation
     addGraphic(options) {
         this.#drawCoordSystem();
         // maxValue, countElements
@@ -127,13 +115,12 @@ export class Canvas {
     }
     
 
-    // implementation
+
     addTable(options) {
         const {rows, percentMainColumn} = options;
         this.#addRow({rows, percentMainColumn});
     }
 
-     // implementation
     addList(options) {
         const margin = 30;
         const {texts, left, top, startNumber, marked} = options;
@@ -143,16 +130,23 @@ export class Canvas {
         })
     }
 
+    addLogo() {
+        this.addImage({source: 'src/image/lzmedia.png', left: 1160, top: 40});
+    }
+
+    addTitle(title) {
+        this.addText({text: title, left: 40, top: 40})
+    }
+
     #addRows() {
         
     }
 
     #addRow(options) {
         const {percentMainColumn, rows} = options;
-        // const {text, left, top, fill, fontSize, textAlign, width, height} = options;
         //percent only first column for next columns -> (100 - percent) / (countcolumns - 1)
         const percentOtherColumns = (100 - percentMainColumn) / 2;
-        const startTop = 50;
+        const startTop = 130;
         const defaultHeight = 45;
 
         let marginLeft = 60;
@@ -177,8 +171,6 @@ export class Canvas {
         //count column
         //pass percent for column, example(70% -> width = 1360 * 0.7)
         //pass textAlign for column
-       
-  
     }
 
     #addSeparatorToOY(maxValue, countElements) {
@@ -189,12 +181,15 @@ export class Canvas {
             const currentNumber = numberToStep * i;
             // {text, left, top, fill, fontSize, textAlign, width}
             this.addText({text: `${currentNumber}`, left: 30, top: constant.HEIGHT_OF_GRAPHIC + constant.START_GRAPHIC_Y - (step * i), width: 30, textAlign: 'right'}); 
-            this.canvas.add(new fabric.Line([0, 100, constant.WIDTH_OF_GRAPHIC - 40, 100], {
+            const line = new fabric.Line([0, 100, constant.WIDTH_OF_GRAPHIC - 40, 100], {
                 left: 70,
                 top: constant.HEIGHT_OF_GRAPHIC + constant.START_GRAPHIC_Y - (step * i),
                 stroke: '#D5CCFE',
-                strokeWidth: 2
-            }))
+                strokeWidth: 2,
+                preserveObjectStacking: false
+            });
+            this.canvas.add(line)
+            this.canvas.sendBackwards(line, true)
         }
     }
 
@@ -212,12 +207,11 @@ export class Canvas {
             {
                 value: 5732,
                 date: 'Март'
-            },
+            }
         ]
         const margin = 70;
         const height = constant.HEIGHT_OF_GRAPHIC;
         //coef for relation px
-        console.log(data.length)
         const stepH = height / maxValue;
         const marginStep = margin  / data.length;
         //minus left part before start coords
@@ -227,8 +221,8 @@ export class Canvas {
         // this.addShape({type: 'rect', width: widthElem, height: 200 * stepH, left: 80 + widthElem + 10, top: constant.HEIGHT_OF_GRAPHIC + constant.START_GRAPHIC_Y - 200 * stepH, fill: '#3e2e88'})
         for(let i = 0; i < data.length; i++) {
             const value = data[i].value * stepH;
-            this.addShape({type: 'rect', width: widthElem, height: value, left: startX, top: constant.HEIGHT_OF_GRAPHIC + constant.START_GRAPHIC_Y - value, fill: '#3e2e88'});
-            this.#addTextUnderColumnOX({text: data[i].date, width: widthElem, left: startX, top: constant.HEIGHT_OF_GRAPHIC + constant.START_GRAPHIC_Y });
+            this.addShape({type: 'rect', width: widthElem, height: value, left: startX, top: constant.HEIGHT_OF_GRAPHIC + constant.START_GRAPHIC_Y - value, fill: '#3e2e88', back: false});
+            this.#addTextUnderColumnOX({text: data[i].date, width: widthElem, left: startX, top: constant.HEIGHT_OF_GRAPHIC + constant.START_GRAPHIC_Y, countColumn: i });
             //center for inside element
             this.#addTextIntoColumn({text: `${data[i].value}`, width: widthElem, left: startX, top: (constant.HEIGHT_OF_GRAPHIC + constant.START_GRAPHIC_Y - value/2) })
             startX += widthElem + marginStep;
@@ -237,13 +231,14 @@ export class Canvas {
     }
 
     #addTextUnderColumnOX(options) {
-        const {text, width, left, top} = options;
-        this.addText({text, width, left, top, textAlign: 'center', fontSize: 20});
+        const {text, width, left, top, countColumn} = options;
+        //rotate text depend countColumn
+        this.addText({text, width, left, top, textAlign: 'center', fontSize: 24});
     }
 
     #addTextIntoColumn(options) {
         const {text, width, left, top} = options;
-        this.addText({text, width, left, top, textAlign: 'center', fontSize: 20, fill: '#fff'});
+        this.addText({text, width, left, top, textAlign: 'center', fontSize: 34, fill: '#fff'});
     }
 
     #drawCoordSystem(options) {
@@ -270,6 +265,8 @@ export class Canvas {
         // group.addWithUpdate(OY);
         this.canvas.add(OX);
         this.canvas.add(OY);
+        this.canvas.sendToBack(OX)
+        this.canvas.sendToBack(OY)
     }
 
     #pasteElement = (e) => {
@@ -334,8 +331,8 @@ export class Canvas {
             console.log('render')
             this.canvas.renderAll();
         }, (o, obj) => {
-            console.log(o)
-            console.log(obj)
+            // console.log(o)
+            // console.log(obj)
         })
     }
 

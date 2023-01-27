@@ -1,6 +1,7 @@
 class Slider {
-    #callbacks = null;
+    _callbacks = null;
     #prevSlide = null;
+    #prevIdxSlide = null;
     #sliderContainerClass = null;
 
     constructor(options) {
@@ -13,7 +14,7 @@ class Slider {
         this.activeSlide = 0;
         this.activeClass = activeClass;
 
-        this.#callbacks = {};
+        this._callbacks = {};
         this.#setActiveSlideElem(this.activeSlide);
         this.#sliderContainerClass = sliderClass;
 
@@ -36,19 +37,23 @@ class Slider {
     }
 
     onChangeSlide(cb) {
-        if(this.#callbacks['change-slide']) {
-            this.#callbacks['change-slide'].push(cb)
+        if(this._callbacks['change-slide']) {
+            this._callbacks['change-slide'].push(cb)
         } else {
-            this.#callbacks['change-slide'] = [cb];
+            this._callbacks['change-slide'] = [cb];
         }
     }
 
-    #executeCallbacks = (type) => {
-        if(this.#callbacks[type]) {
-            this.#callbacks[type].forEach(cb => cb(this.activeSlide, this.sliderElem[this.activeSlide], this.sliderElem[this.#prevSlide]));
+    _executeCallbacks = (type, ...args) => {
+        if(this._callbacks[type]) {
+            this._callbacks[type].forEach(cb => cb(...args));
         }
     }
 
+
+    getSlideById(id) {
+        return this.sliderElem[id];
+    }
 
     #addNodeToNode() {
         const nodeImg = document.createElement('img');
@@ -80,10 +85,11 @@ class Slider {
 
     #goToSlide(idx) {
         this.#setInActiveSlideElem(this.activeSlide);
+        this.#prevSlide = this.activeSlide;
         //prev slide set if need
         this.setActiveSlide(idx);
         this.#setActiveSlideElem(idx);
-        this.#executeCallbacks('change-slide');
+        this._executeCallbacks('change-slide', this.activeSlide, this.sliderElem[this.activeSlide], this.sliderElem[this.#prevSlide], this.#prevSlide);
     }
 
     #toNextSlide = () => {
@@ -96,7 +102,7 @@ class Slider {
             this.setActiveSlide(this.activeSlide + 1);
         }
         this.#setActiveSlideElem(this.activeSlide);
-        this.#executeCallbacks('change-slide')
+        this._executeCallbacks('change-slide', this.activeSlide, this.sliderElem[this.activeSlide], this.sliderElem[this.#prevSlide], this.#prevSlide)
     }
 
     #toPrevSlide = () => {
@@ -109,7 +115,7 @@ class Slider {
             this.setActiveSlide(this.activeSlide - 1);
         }
         this.#setActiveSlideElem(this.activeSlide);
-        this.#executeCallbacks('change-slide')
+        this._executeCallbacks('change-slide', this.activeSlide, this.sliderElem[this.activeSlide], this.sliderElem[this.#prevSlide], this.#prevSlide)
     }
 
 }
