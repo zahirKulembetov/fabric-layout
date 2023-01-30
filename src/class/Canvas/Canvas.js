@@ -51,6 +51,7 @@ export class Canvas {
     addShape(options) {
         const {type, width, height, left, top, fill, selectable = true, back = true} = options;
         if(type === 'rect') {
+            console.log(selectable)
             const rect = new fabric.Rect({
                 width, height, left, top, fill, selectable
             });

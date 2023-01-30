@@ -6,6 +6,7 @@ class Report {
     #form = null;
     #currentPage = null;
     #savePageButton = null;
+    #deletePageButton = null;
     #typePage = null;
     #saveChangesButton = null;
     #callbacks = null;
@@ -21,12 +22,14 @@ class Report {
         this.#form = document.querySelector('.form-page .form-content');
         this.#savePageButton = document.querySelector('.button-save-page');
         this.#saveChangesButton = document.querySelector('.button-save-changes');
+        this.#deletePageButton = document.querySelector('.button-delete-page');
         this.#typeLayout = document.querySelector('#layout');
 
         this.#typePage.addEventListener('change', this.#detectTypePage);
         this.#savePageButton.addEventListener('click', this.#savePageHandler);
         this.#saveChangesButton.addEventListener('click', this.#editPage);
         this.#typeLayout.addEventListener('change', this.#detectTypeLayout)
+        this.#deletePageButton.addEventListener('click', this.#deletePage);
 
         this.#callbacks = {};
         this.pageFactory = pageFactory;
@@ -77,14 +80,14 @@ class Report {
         //If page exist, can edit page and save
         this.#saveChanges();
         this.pages.push(this.#currentPage);
-        this.#executeCallbacks('save');
+        this.#executeCallbacks('save', this.#currentPage);
         this.#currentPage = null;
     }
     //get id page and set current page from array
     
     JSONToCanvas = (id) => {
+        console.log(this.pages)
         const page = this.pages[id];
-        console.log(page)
         if(page) {
             this.#currentPage = page;
             const json = JSON.parse(this.#currentPage.json);
@@ -102,16 +105,16 @@ class Report {
         this.canvas.clear();
     }
 
-    #executeCallbacks = (type) => {
-        this.#callbacks[type].forEach(cb => cb(this.#currentPage));
+    #executeCallbacks = (type, ...args) => {
+        this.#callbacks[type].forEach(cb => cb(...args));
     }
 
     onSavePage = (cb) => {
-        if(this.#callbacks['save']) {
-            this.#callbacks['save'].push(cb)
-        } else {
-            this.#callbacks['save'] = [cb];
-        }
+        this.#onSave('save', cb);
+    }
+
+    onDeletePage = (cb) => {
+        this.#onSave('delete', cb);
     }
 
     getPages() {
@@ -128,6 +131,14 @@ class Report {
 
     #getImagePage() {
         return this.canvas.getImage();
+    }
+
+    #onSave(type, cb) {
+        if(this.#callbacks[type]) {
+            this.#callbacks[type].push(cb)
+        } else {
+            this.#callbacks[type] = [cb];
+        }
     }
 
     #addFormToDOM(form) {
@@ -163,6 +174,15 @@ class Report {
     #clearFormContainer() {
         const children = Array.from(this.#form.children);
         children.forEach(child => child.remove())
+    }
+
+    #deletePage = (e) => {
+        if(!this.getCurrentPage()) return;
+        const deleteIdxPage = this.pages.indexOf(this.getCurrentPage());
+        this.pages.splice(deleteIdxPage, 1);
+        this.#currentPage = null;
+        this.#clearCanvas();
+        this.#executeCallbacks('delete', deleteIdxPage);
     }
 
 

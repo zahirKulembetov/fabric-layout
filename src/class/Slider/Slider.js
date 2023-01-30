@@ -15,17 +15,17 @@ class Slider {
         this.activeClass = activeClass;
 
         this._callbacks = {};
-        this.#setActiveSlideElem(this.activeSlide);
+        this._setActiveSlideElem(this.activeSlide);
         this.#sliderContainerClass = sliderClass;
 
-        this.nextButton.addEventListener('click', this.#toNextSlide);
-        this.prevButton.addEventListener('click', this.#toPrevSlide);
+        this.nextButton.addEventListener('click', this._toNextSlide);
+        this.prevButton.addEventListener('click', this._toPrevSlide);
         this.slider.addEventListener('click', this.#handlerSliderListener)
     }
 
     addSlide() {
         this.#addNodeToNode();
-        this.#toNextSlide();
+        this._toNextSlide();
     }
 
     getActiveSlide() {
@@ -50,6 +50,9 @@ class Slider {
         }
     }
 
+    deletePage(idx) {
+        this.#deletePageHandler(idx);
+    }
 
     getSlideById(id) {
         return this.sliderElem[id];
@@ -70,52 +73,66 @@ class Slider {
         if(!isContainer) {
             const numberPage = +target.getAttribute('data-page');
             if(numberPage !== this.activeSlide) { // if not same page
-                this.#goToSlide(numberPage);
+                this._goToSlide(numberPage);
             }
         } 
     }
 
-    #setActiveSlideElem(numberSlide) {
+    _setActiveSlideElem(numberSlide) {
         this.sliderElem[numberSlide].classList.add(this.activeClass);
     }
 
-    #setInActiveSlideElem(numberSlide) {
+    _setInActiveSlideElem(numberSlide) {
         this.sliderElem[numberSlide].classList.remove(this.activeClass);
     }
 
-    #goToSlide(idx) {
-        this.#setInActiveSlideElem(this.activeSlide);
+    _goToSlide(idx) {
+        this._setInActiveSlideElem(this.activeSlide);
         this.#prevSlide = this.activeSlide;
         //prev slide set if need
         this.setActiveSlide(idx);
-        this.#setActiveSlideElem(idx);
+        this._setActiveSlideElem(idx);
         this._executeCallbacks('change-slide', this.activeSlide, this.sliderElem[this.activeSlide], this.sliderElem[this.#prevSlide], this.#prevSlide);
     }
 
-    #toNextSlide = () => {
+    _toNextSlide = () => {
         if(!this.countElemOfSlider) return
-        this.#setInActiveSlideElem(this.activeSlide);
+        this._setInActiveSlideElem(this.activeSlide);
         this.#prevSlide = this.activeSlide;
         if(this.activeSlide === this.countElemOfSlider) {
             this.setActiveSlide(0);
         } else {
             this.setActiveSlide(this.activeSlide + 1);
         }
-        this.#setActiveSlideElem(this.activeSlide);
+        this._setActiveSlideElem(this.activeSlide);
         this._executeCallbacks('change-slide', this.activeSlide, this.sliderElem[this.activeSlide], this.sliderElem[this.#prevSlide], this.#prevSlide)
     }
 
-    #toPrevSlide = () => {
+    _toPrevSlide = () => {
         if(!this.countElemOfSlider) return
-        this.#setInActiveSlideElem(this.activeSlide);
+        this._setInActiveSlideElem(this.activeSlide);
         this.#prevSlide = this.activeSlide;
         if(this.activeSlide === 0) {
             this.setActiveSlide(this.countElemOfSlider);
         } else {
             this.setActiveSlide(this.activeSlide - 1);
         }
-        this.#setActiveSlideElem(this.activeSlide);
+        this._setActiveSlideElem(this.activeSlide);
         this._executeCallbacks('change-slide', this.activeSlide, this.sliderElem[this.activeSlide], this.sliderElem[this.#prevSlide], this.#prevSlide)
+    }
+
+    #deletePageHandler(idx){
+        const deleleIdx = this.sliderElem.indexOf(idx);
+        this.sliderElem[idx].remove();
+        this.sliderElem.splice(deleleIdx, 1);
+        this.countElemOfSlider -=1;
+        this._toPrevSlide();
+        this._changeDataPage();
+    }
+
+    _changeDataPage() {
+        this.sliderElem = [...this.slider.children];
+        this.sliderElem.forEach((element, idx) => element.setAttribute('data-page', idx));
     }
 
 }

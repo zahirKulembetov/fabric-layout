@@ -5,6 +5,7 @@ import pageFactory from "./class/Page/PageFactory.js"
 import canvasCreator from "./class/Canvas/Canvas.js";
 import setImageToSlide from "./class/utils/imageSlide.js";
 import SliderWithDragNDrop from "./class/Slider/SliderWithDragNDrop.js";
+import changeOrderArray from "./class/utils/changeOrderArray.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     const slider = new SliderWithDragNDrop({
@@ -17,20 +18,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     slider.onChangeSlide((activeSlideIdx, _activeSlide, prevSlide, prevSlideIdx) => {
         report.JSONToCanvas(activeSlideIdx); //rename function 
-        
         const image = report.getPageByIndex(prevSlideIdx);
         if(!image) return;
         setImageToSlide(prevSlide, image['image']);
-
     })
 
     slider.afterDrag((indexMatch) => {
-        //change order in report pages !!!
-        console.log(indexMatch)
+        changeOrderArray(report.getPages(), indexMatch);
     })
 
     report.onSavePage((page) => {
         slider.addSlide();
+    })
+
+    report.onDeletePage((pageIdx) => {
+        slider.deletePage(pageIdx)
     })
 
 })

@@ -1,3 +1,4 @@
+import throttle from "../utils/throttle.js";
 import Slider from "./Slider.js";
 
 class SliderWithDragNDrop extends Slider {
@@ -26,23 +27,29 @@ class SliderWithDragNDrop extends Slider {
     }
 
     #setListenerForDrag() {
-        this.slider.addEventListener('dragstart', (evt) => {
-            this.#activeDragElement = evt.target;
-        });
-        this.slider.addEventListener('dragend', (evt) => {
-            this.#activeDragElement = null;
-        })
-        this.slider.addEventListener('dragover', (evt) => {
+        
+        const dragover = (evt) => {
             evt.preventDefault();
+            if(!this.#activeDragElement) return
             const currentElement = evt.target;
-            
             const isMoveable = this.#activeDragElement !== currentElement && currentElement.classList.contains('canvas-list-elem');
             if(!isMoveable) return;
             const nextElement = this.#getNextElement(evt.clientY, currentElement);
             this.slider.insertBefore(this.#activeDragElement, nextElement);
-            // console.log(currentElement, this.#activeDragElement, this.#activeDragElement.nextElementSibling)
-            this.#recreateContainerElement()
+        
+            this._setInActiveSlideElem(+currentElement.getAttribute('data-page'));
+            this._recreateContainerElement();
+            this._goToSlide(+this.#activeDragElement.getAttribute('data-page')); 
+        } 
+
+        this.slider.addEventListener('dragstart', (evt) => {
+            this.#activeDragElement = evt.target;
         })
+        this.slider.addEventListener('dragend', (evt) => {
+            this.#activeDragElement = null;
+        })
+        this.slider.addEventListener('dragover', throttle(dragover, 150))
+
     }
 
     #getNextElement(cursorPosition, currentElement) {
@@ -54,14 +61,18 @@ class SliderWithDragNDrop extends Slider {
         return nextElement;
     }
 
-    #recreateContainerElement = () => {
+    _recreateContainerElement = () => {
         const changeElementIdx = {};
         
         this.sliderElem = [...this.slider.children];
         this.sliderElem.forEach((element, idx) => {
             const oldIdx = element.getAttribute('data-page');
-            changeElementIdx[oldIdx] = idx;
+            //not same element + don't add loop depend, example: {1: 0, 0: 1}
+            if(+oldIdx !== idx && changeElementIdx[idx] !== +oldIdx) {
+                changeElementIdx[oldIdx] = idx;
+            }
             element.setAttribute('data-page', idx);
+            
         });
         this._executeCallbacks('afterdrag', changeElementIdx)
 
