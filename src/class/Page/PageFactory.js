@@ -7,11 +7,6 @@ import Table from "../TypePage/Table.js";
 import Bonus from "../TypePage/Bonus.js";
 
 
-//each page extend from main page, which contain main function, like this:
-//addTitle()
-//addLogo()
-//addNumberPage()
-
 class PageFactory {
     create(type) {
         let page;

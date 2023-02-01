@@ -1,6 +1,6 @@
 import { Canvas } from "../Canvas/Canvas.js";
 import LayoutUtil from "../utils/layoutUtil.js"
-//Выбор шаблона отдельно + данные для шаблона и действия с ним отдельно!!!!!!!!
+
 class Report {
     #typePageOption = null;
     #form = null;
@@ -51,7 +51,7 @@ class Report {
     }
 
 
-    //save first time and edit
+
 
     #editPage = () => {
         if(!this.#currentPage) return
@@ -69,21 +69,12 @@ class Report {
     #savePageHandler = (e) => {
 
         if(!this.#currentPage) return
-        //Double save one page solve THIS
-
-        //Maybe equal object of changes per page and update
-        
-        //In future button for save doesn't exist
-        
-        //Clear canvas and go next slide if page doesn't exist
-        
-        //If page exist, can edit page and save
+      
         this.#saveChanges();
         this.pages.push(this.#currentPage);
         this.#executeCallbacks('save', this.#currentPage);
         this.#currentPage = null;
     }
-    //get id page and set current page from array
     
     JSONToCanvas = (id) => {
         console.log(this.pages)
@@ -150,8 +141,6 @@ class Report {
         if(!value) return
         this.#clearFormContainer();
         this.#typePageOption = e.target.value;
-        //before create form check if page exist pass params to init else default init
-        console.log(this.#typePageOption)
         this.#choosePage()
         const form = this.#currentPage.createForm();
         this.#addFormToDOM(form);

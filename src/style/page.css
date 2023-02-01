@@ -47,3 +47,18 @@
 .canvas-list-elem--active {
     background-color: rgba(214, 214, 214, 0.622);
 }
+
+.manage-canvas {
+    display: flex;
+    justify-content: space-between; 
+    gap: 20px;
+
+}
+
+.manage-canvas-add, .manage-canvas-manipulate {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}

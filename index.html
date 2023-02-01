@@ -9,14 +9,41 @@
     <script src="./src/fabric.js"></script>
 </head>
 <body>
+
     <div class="content">
+        <div class="chose-project">
+            <div>
+                <label for="project">Выбрать проект:</label>
+                <select name="project" id="project">
+                    <option value="">Выбрать проект:</option>
+                    <option value="appboster">Appboster</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-functional">
+            <form class="form-functional-add"></form>
+        </div>
         <div class="manage-canvas">
-            <input class="btn image-loader-button" type="file" name="imageLoader" />
-            <button class="btn delete-button">Удалить элемент</button>
-            <a href="" class="btn save-as-image">Сохранить как изображение</a>
-            <button class="btn save-as-json">Сохранить как JSON</button>
-            <button class="btn copy-element">Скопировать</button>
-            <button class="btn paste-element">Вставить</button>
+            
+            <!-- Add -->
+            <div class="manage-canvas-add">
+                <button class="btn">Добавить текст</button>
+                <button class="btn">Добавить график</button>
+                <button class="btn">Добавить таблицу</button>
+                <input class="btn image-loader-button" type="file" name="imageLoader"/>
+            </div>
+            <!-- Add -->
+
+            <!-- Manages -->
+            <div class="manage-canvas-manipulate">
+                <button class="btn delete-button">Удалить элемент</button>
+                <a href="" class="btn save-as-image">Сохранить как изображение</a>
+                <button class="btn save-as-json">Сохранить как JSON</button>
+                <button class="btn copy-element">Скопировать</button>
+                <button class="btn paste-element">Вставить</button>
+            </div>
+            <!-- Manages -->
+        
         </div>
         <div class="page-emulate"> 
             <div class="page-emulate-main canvas">
@@ -41,13 +68,6 @@
                         <option value="summary">Резюме</option>
                         <option value="bonus">Бонус</option>
                         <option value="resultindigits">Результат в цифрах</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="project">Выбрать проект:</label>
-                    <select name="project" id="project">
-                        <option value="">Выбрать проект:</option>
-                        <option value="appboster">Appboster</option>
                     </select>
                 </div>
                 <div>

@@ -4,10 +4,12 @@ import constant from "../../constant/constant.js";
 
 //Button add text and choose fontSize
 //Text on graphic under column with angle
-//Add empty page with functions for custom create page
+//Add empty page with functions for custom create page!!!!
 //Add layout with orange blocks and user choice
+
 //Class Canvas panel !!!!
 //Class canvas only contains draw methods other methods include cavnas panel!!!
+
 export class Canvas {
     #callbacks;
     constructor() {
