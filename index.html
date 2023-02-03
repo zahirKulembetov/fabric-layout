@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./src/style/index.css">
     <script src="./src/fabric.js"></script>
 </head>
-<body class="modal-open">
+<body class="modal-ope">
 
     <div class="content">
         <div class="chose-project">
@@ -21,18 +21,22 @@
             </div>
         </div>
         <div class="manage-canvas">
-            
+            <!-- Graphic, Table -->
+            <div class="manage-canvas-elem manage-canvas-schema">
+                <button class="btn btn-add-graphic" data-type="graphic">Добавить график</button>
+                <button class="btn btn-add-table" data-type="table">Добавить таблицу</button>
+            </div>
+            <!--  -->
+
             <!-- Add -->
-            <div class="manage-canvas-add">
+            <div class="manage-canvas-elem manage-canvas-add">
                 <button class="btn btn-add-text">Добавить текст</button>
-                <button class="btn btn-add-graphic">Добавить график</button>
-                <button class="btn btn-add-table">Добавить таблицу</button>
                 <input class="btn image-loader-button" type="file" name="imageLoader"/>
             </div>
             <!-- Add -->
 
             <!-- Manages -->
-            <div class="manage-canvas-manipulate">
+            <div class="manage-canvas-elem manage-canvas-manipulate">
                 <button class="btn delete-button">Удалить элемент</button>
                 <a href="" class="btn save-as-image">Сохранить как изображение</a>
                 <button class="btn save-as-json">Сохранить как JSON</button>

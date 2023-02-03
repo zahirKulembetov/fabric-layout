@@ -196,11 +196,11 @@ class Report {
         this.canvas.addText(options);
     }
 
-    addGraphic(options) {
+    #addGraphic(options) {
         this.canvas.addGraphic(options);
     }
 
-    addTable(options) {
+    #addTable(options) {
         this.canvas.addTable(options);
     }
 
@@ -217,8 +217,8 @@ class Report {
             'images': this.#addImage,
             'figure': this.#addShape,
             'text': this.#addText,
-            'graphic': this.addGraphic,
-            'table': this.addTable,
+            'graphic': this.#addGraphic,
+            'table': this.#addTable,
             'logo': this.#addLogo,
             'title': this.#addTitle
         }

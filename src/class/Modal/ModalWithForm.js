@@ -4,11 +4,13 @@ class ModalWithForm extends Modal {
     #callback = {};
     constructor(opt, form) {
         super(opt);
-        this.form = form;
+        this.formFactory = form;
+        this.form = null;
     }
 
     addFormType(type) {
-        this.form = this.form.create(type);
+        console.log(this.form)
+        this.form = this.formFactory.create(type);
         this.addForm();
     }
 

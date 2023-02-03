@@ -6,12 +6,6 @@ import canvasCreator from "./class/Canvas/Canvas.js";
 import setImageToSlide from "./class/utils/imageSlide.js";
 import SliderWithDragNDrop from "./class/Slider/SliderWithDragNDrop.js";
 import changeOrderArray from "./class/utils/changeOrderArray.js";
-import Modal from "./class/Modal/Modal.js";
-import ModalWithForm from "./class/Modal/ModalWithForm.js";
-import formGraphic from "./class/Form/FormGraphic.js"
-import prepareForm from "./class/utils/prepareFormGraphic.js";
-import FormFactory from "./class/Form/FormFactory.js";
-import constant from "./constant/constant.js";
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -23,12 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const report = new Report(pageFactory, canvasCreator);
-
-    const modal = new ModalWithForm({
-        modal: '#modal',
-        active: 'modal-open'
-    }, FormFactory)
-    modal.addFormType(constant.FORM_GRAPHIC);
 
     slider.onChangeSlide((activeSlideIdx, _activeSlide, prevSlide, prevSlideIdx) => {
         report.JSONToCanvas(activeSlideIdx); //rename function 
@@ -49,8 +37,5 @@ document.addEventListener('DOMContentLoaded', () => {
         slider.deletePage(pageIdx)
     })
 
-    modal.onSubmit( form => {
-        report.addGraphic(prepareForm(form));
-    })
     
 })

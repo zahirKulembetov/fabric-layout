@@ -69,9 +69,9 @@ class FormGraphic extends FormHTML {
         inputs.forEach(this._addElementForForm)
     }
 
-    _destroy() {
-        this.form.style.display = 'none';
-    }
+    // _destroy() {
+    //     this.form.style.display = 'none';
+    // }
 
 }
 

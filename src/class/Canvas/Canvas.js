@@ -1,4 +1,7 @@
 import constant from "../../constant/constant.js";
+import FormFactory from "../Form/FormFactory.js";
+import ModalWithForm from "../Modal/ModalWithForm.js";
+import prepareFormGraphic from "../utils/prepareFormGraphic.js";
 
 //rename to PAGE maybe singleton? because can use without extends Page class
 
@@ -12,10 +15,10 @@ import constant from "../../constant/constant.js";
 
 export class Canvas {
     #callbacks;
-    constructor() {
+    constructor(modal) {
         this.canvas = new fabric.Canvas('page');
         this.canvas.selection = false;
-
+        this.modal = modal;
         this.copiedElement = null;
 
         this.saveAsImageButton = document.querySelector('.save-as-image');
@@ -27,8 +30,13 @@ export class Canvas {
         this.copyElementButton = document.querySelector('.copy-element');
         this.pasteElementButton = document.querySelector('.paste-element');
 
+        this.canvasSchema = document.querySelector('.manage-canvas-schema');
+
         this.saveAsImageButton.addEventListener('click', this.#saveAsImage);
         this.saveAsJsonButton.addEventListener('click', this.saveAsJSON);
+
+        this.canvasSchema.addEventListener('click', this.#detectTypeModal)
+        this.#onModalSubmit();
 
         this.deleteElementButton.addEventListener('click', this.#deleteElement);
         this.imageLoaderButton.addEventListener('change', this.#uploadImage);
@@ -177,7 +185,21 @@ export class Canvas {
         //pass percent for column, example(70% -> width = 1360 * 0.7)
         //pass textAlign for column
     }
+// Canvas-panel
+    #detectTypeModal = (e) => {
+        const target = e.target;
+        if(!target.classList.contains('btn')) return;
+        this.modal.open();
+        const type = target.getAttribute('data-type');
+        this.modal.addFormType(`form-${type}`);
+    }
 
+    #onModalSubmit() {
+        this.modal.onSubmit( form => {
+            this.addGraphic(prepareFormGraphic(form))
+        })
+    }
+// Canvas-panel
     #addSeparatorToOY(maxValue, countElements) {
         //HEIGHT_OF_GRAPHIC
         const step = Math.floor( constant.HEIGHT_OF_GRAPHIC / countElements);
@@ -345,6 +367,10 @@ export class Canvas {
         this.canvas.clear()
     }
 }
-
-const canvasCreator = new Canvas();
+//Move modal to canvas panel !!!
+//Canvas only draw !!!
+const canvasCreator = new Canvas(new ModalWithForm({
+    modal: '#modal',
+    active: 'modal-open'
+}, FormFactory));
 export default canvasCreator;

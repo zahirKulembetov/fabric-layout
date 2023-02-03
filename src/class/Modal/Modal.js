@@ -8,9 +8,6 @@ class Modal {
 
         this.body = document.querySelector('body');
         this.activeClass = opt.active;
-
-        this.modal.addEventListener('click', this._overlayClick);
-        window.addEventListener('keydown', this._keyListener);
     }
 
 
@@ -28,6 +25,8 @@ class Modal {
 
     open() {
         this.body.classList.add(this.activeClass);
+        this.modal.addEventListener('click', this._overlayClick);
+        window.addEventListener('keydown', this._keyListener);
     }
 
     close() {

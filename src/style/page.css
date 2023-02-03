@@ -55,7 +55,7 @@
 
 }
 
-.manage-canvas-add, .manage-canvas-manipulate {
+.manage-canvas-elem {
     display: flex;
     flex-direction: column;
     gap: 10px;
