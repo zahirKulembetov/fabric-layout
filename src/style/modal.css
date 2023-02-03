@@ -1,0 +1,32 @@
+.modal-open #modal {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(131, 131, 128, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    display: none;
+    background-color: white;
+    border-radius: 10px;
+    min-height: 500px;
+    min-width: 500px;
+    box-shadow: 4px 4px 56px 0px rgba(34, 60, 80, 0.2);
+    padding: 15px;
+}
+
+.modal-open {
+    overflow-y: hidden;
+}
+
+.modal-open .modal {
+    display: flex;
+}
+
+.modal .modal-body {
+
+}

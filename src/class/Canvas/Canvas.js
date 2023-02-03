@@ -20,6 +20,7 @@ export class Canvas {
 
         this.saveAsImageButton = document.querySelector('.save-as-image');
         this.saveAsJsonButton = document.querySelector('.save-as-json');
+        this.addGraphicButton = document.querySelector('.btn-add-graphic');
 
         this.deleteElementButton = document.querySelector('.delete-button');
         this.imageLoaderButton = document.querySelector('.image-loader-button');
@@ -106,10 +107,11 @@ export class Canvas {
 
 
     addGraphic(options) {
+        const {count, max, columns} = options;
         this.#drawCoordSystem();
         // maxValue, countElements
-        this.#addSeparatorToOY(7000, 7);
-        this.#addColumn(7000, 7);
+        this.#addSeparatorToOY(max, count);
+        this.#addColumn(max, count, columns);
         // this.#addText();
     }
 
@@ -196,22 +198,22 @@ export class Canvas {
         }
     }
 
-    #addColumn(maxValue, countElements) {
+    #addColumn(maxValue, countElements, data) {
         let startX = 80;
-        const data = [
-            {
-                value:2794,
-                date: 'Январь'
-            },
-            {
-                value: 4049,
-                date: 'Февраль'
-            },
-            {
-                value: 5732,
-                date: 'Март'
-            }
-        ]
+        // const data = [
+        //     {
+        //         value:2794,
+        //         date: 'Январь'
+        //     },
+        //     {
+        //         value: 4049,
+        //         date: 'Февраль'
+        //     },
+        //     {
+        //         value: 5732,
+        //         date: 'Март'
+        //     }
+        // ]
         const margin = 70;
         const height = constant.HEIGHT_OF_GRAPHIC;
         //coef for relation px
