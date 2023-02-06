@@ -1,37 +1,19 @@
-import { Canvas } from "../Canvas/Canvas.js";
+import Canvas  from "../Canvas/Canvas.js";
+import events from "../Events/Event.js";
 import LayoutUtil from "../utils/layoutUtil.js"
 
 class Report {
     #typePageOption = null;
     #form = null;
     #currentPage = null;
-    #savePageButton = null;
-    #deletePageButton = null;
-    #typePage = null;
-    #saveChangesButton = null;
-    #callbacks = null;
     #methodByType = null;
-    #typeLayout = null;
      /**
      * @param {Canvas} canvas
      */
     constructor(pageFactory, canvas) {
         this.pages = [];
         
-        this.#typePage = document.querySelector('#page-type');
         this.#form = document.querySelector('.form-page .form-content');
-        this.#savePageButton = document.querySelector('.button-save-page');
-        this.#saveChangesButton = document.querySelector('.button-save-changes');
-        this.#deletePageButton = document.querySelector('.button-delete-page');
-        this.#typeLayout = document.querySelector('#layout');
-
-        this.#typePage.addEventListener('change', this.#detectTypePage);
-        this.#savePageButton.addEventListener('click', this.#savePageHandler);
-        this.#saveChangesButton.addEventListener('click', this.#editPage);
-        this.#typeLayout.addEventListener('change', this.#detectTypeLayout)
-        this.#deletePageButton.addEventListener('click', this.#deletePage);
-
-        this.#callbacks = {};
         this.pageFactory = pageFactory;
         this.canvas = canvas;
 
@@ -53,7 +35,7 @@ class Report {
 
 
 
-    #editPage = () => {
+    editPage = () => {
         if(!this.#currentPage) return
         this.#saveChanges();
         // this.#currentPage = null;
@@ -66,13 +48,13 @@ class Report {
         console.log(pageJson)
     }
 
-    #savePageHandler = (e) => {
+    savePageHandler = (e) => {
 
         if(!this.#currentPage) return
       
         this.#saveChanges();
         this.pages.push(this.#currentPage);
-        this.#executeCallbacks('save', this.#currentPage);
+        events.notify('save', this.#currentPage);
         this.#currentPage = null;
     }
     
@@ -96,16 +78,13 @@ class Report {
         this.canvas.clear();
     }
 
-    #executeCallbacks = (type, ...args) => {
-        this.#callbacks[type].forEach(cb => cb(...args));
-    }
 
     onSavePage = (cb) => {
-        this.#onSave('save', cb);
+        events.subscribe('save', cb)
     }
 
     onDeletePage = (cb) => {
-        this.#onSave('delete', cb);
+        events.subscribe('delete-page', cb)
     }
 
     getPages() {
@@ -124,19 +103,11 @@ class Report {
         return this.canvas.getImage();
     }
 
-    #onSave(type, cb) {
-        if(this.#callbacks[type]) {
-            this.#callbacks[type].push(cb)
-        } else {
-            this.#callbacks[type] = [cb];
-        }
-    }
-
     #addFormToDOM(form) {
         this.#form.insertAdjacentHTML('afterbegin', form);
     }
 
-    #detectTypePage = (e) => {
+    detectTypePage = (e) => {
         const value = e.target.value;
         if(!value) return
         this.#clearFormContainer();
@@ -146,7 +117,7 @@ class Report {
         this.#addFormToDOM(form);
     }
 
-    #detectTypeLayout = (e) => {
+    detectTypeLayout = (e) => {
         const value = e.target.value;
         if(!value) return;
         const source = LayoutUtil.getLayout(value);
@@ -165,13 +136,13 @@ class Report {
         children.forEach(child => child.remove())
     }
 
-    #deletePage = (e) => {
+    deletePage = (e) => {
         if(!this.getCurrentPage()) return;
         const deleteIdxPage = this.pages.indexOf(this.getCurrentPage());
         this.pages.splice(deleteIdxPage, 1);
         this.#currentPage = null;
         this.#clearCanvas();
-        this.#executeCallbacks('delete', deleteIdxPage);
+        events.notify('delete-page', deleteIdxPage);
     }
 
     

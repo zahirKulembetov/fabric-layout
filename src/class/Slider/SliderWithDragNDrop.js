@@ -1,3 +1,4 @@
+import events from "../Events/Event.js";
 import throttle from "../utils/throttle.js";
 import Slider from "./Slider.js";
 
@@ -14,11 +15,7 @@ class SliderWithDragNDrop extends Slider {
     }
 
     afterDrag(cb){
-        if(this._callbacks['afterdrag']) {
-            this._callbacks['afterdrag'].push(cb)
-        } else {
-            this._callbacks['afterdrag'] = [cb];
-        }
+        events.subscribe('afterdrag', cb)
     }
   
     #setDraggable() {
@@ -74,8 +71,7 @@ class SliderWithDragNDrop extends Slider {
             element.setAttribute('data-page', idx);
             
         });
-        this._executeCallbacks('afterdrag', changeElementIdx)
-
+        events.notify('afterdrag', changeElementIdx)
     }
 }
 

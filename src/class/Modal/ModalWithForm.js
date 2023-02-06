@@ -1,7 +1,7 @@
+import events from "../Events/Event.js";
 import Modal from "./Modal.js";
 
 class ModalWithForm extends Modal {
-    #callback = {};
     constructor(opt, form) {
         super(opt);
         this.formFactory = form;
@@ -9,7 +9,6 @@ class ModalWithForm extends Modal {
     }
 
     addFormType(type) {
-        console.log(this.form)
         this.form = this.formFactory.create(type);
         this.addForm();
     }
@@ -20,18 +19,9 @@ class ModalWithForm extends Modal {
     }
 
     onSubmit(cb) {
-        if(this.#callback['submit-modal']) {
-            this.#callback['submit-modal'].push(cb)
-        } else {
-            this.#callback['submit-modal'] = [cb];
-        }
+        events.subscribe('submit-modal', cb)
     }
 
-    #executeCb = (type, ...args) => {
-        if(this.#callback[type]) {
-            this.#callback[type].forEach( cb => cb(...args));
-        }
-    }
 
     addForm(opt) {
         // const {inputs} = opt;
@@ -43,7 +33,7 @@ class ModalWithForm extends Modal {
 
     #onSubmit() {
         this.form.onSubmit(form => {
-            this.#executeCb('submit-modal', form)
+            events.notify('submit-modal', form)
         });
     }
 

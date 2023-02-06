@@ -2,8 +2,9 @@ import FormHTML from "./Form.js";
 
 class FormGraphic extends FormHTML {
     #prevCount = 0;
-    constructor() {
+    constructor(repeater) {
         super();
+        this.repeater = repeater;
         this.default = {
             inputs:  [ {
                 type: 'number',
@@ -30,8 +31,10 @@ class FormGraphic extends FormHTML {
                 max: 5
             }]
         }
+        this.#addRepeaterToForm({inputs: [{type: 'text', text: 'Месяц'}, { type: 'number', text: 'Посетители'}]})
         this.addContentForm(this.default)
         this.#getCountElem();
+        this.form.addEventListener('click', this.#repeaterAdd)
     }
 
     #getCountElem() {
@@ -67,6 +70,21 @@ class FormGraphic extends FormHTML {
 
     #addInputForColumn(inputs) {
         inputs.forEach(this._addElementForForm)
+    }
+
+    #addRepeaterToForm(opt) {
+        console.log(this.form, opt)
+        this.form.insertAdjacentHTML('beforeend', this.repeater.createField(opt))
+    }
+    
+    //after close delete listener
+    #repeaterAdd = (e) => {
+        const target = e.target;
+        if(target.classList.contains('repeater-row-button')) {
+            const html = this.repeater.createField();
+            if(!html) return
+            this.form.insertAdjacentHTML('beforeend', html)
+        }
     }
 
     // _destroy() {

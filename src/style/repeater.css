@@ -1,0 +1,22 @@
+.repeater-row {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin: 10px 0px;
+}
+
+.repeater-row-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    font-size: 30px;
+}
+
+.repeater-input-container {
+
+}
+
+.repeater-inputs-container {
+    padding: 10px;
+    border: 1px solid black;
+}

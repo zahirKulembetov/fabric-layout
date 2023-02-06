@@ -1,3 +1,5 @@
+import events from "../Events/Event.js";
+
 class Slider {
     _callbacks = null;
     #prevSlide = null;
@@ -37,18 +39,9 @@ class Slider {
     }
 
     onChangeSlide(cb) {
-        if(this._callbacks['change-slide']) {
-            this._callbacks['change-slide'].push(cb)
-        } else {
-            this._callbacks['change-slide'] = [cb];
-        }
+        events.subscribe('change-slide', cb);
     }
 
-    _executeCallbacks = (type, ...args) => {
-        if(this._callbacks[type]) {
-            this._callbacks[type].forEach(cb => cb(...args));
-        }
-    }
 
     deletePage(idx) {
         this.#deletePageHandler(idx);
@@ -92,7 +85,7 @@ class Slider {
         //prev slide set if need
         this.setActiveSlide(idx);
         this._setActiveSlideElem(idx);
-        this._executeCallbacks('change-slide', this.activeSlide, this.sliderElem[this.activeSlide], this.sliderElem[this.#prevSlide], this.#prevSlide);
+        events.notify('change-slide', this.activeSlide, this.sliderElem[this.activeSlide], this.sliderElem[this.#prevSlide], this.#prevSlide);
     }
 
     _toNextSlide = () => {
@@ -105,7 +98,7 @@ class Slider {
             this.setActiveSlide(this.activeSlide + 1);
         }
         this._setActiveSlideElem(this.activeSlide);
-        this._executeCallbacks('change-slide', this.activeSlide, this.sliderElem[this.activeSlide], this.sliderElem[this.#prevSlide], this.#prevSlide)
+        events.notify('change-slide', this.activeSlide, this.sliderElem[this.activeSlide], this.sliderElem[this.#prevSlide], this.#prevSlide)
     }
 
     _toPrevSlide = () => {
@@ -118,7 +111,7 @@ class Slider {
             this.setActiveSlide(this.activeSlide - 1);
         }
         this._setActiveSlideElem(this.activeSlide);
-        this._executeCallbacks('change-slide', this.activeSlide, this.sliderElem[this.activeSlide], this.sliderElem[this.#prevSlide], this.#prevSlide)
+        events.notify('change-slide', this.activeSlide, this.sliderElem[this.activeSlide], this.sliderElem[this.#prevSlide], this.#prevSlide)
     }
 
     #deletePageHandler(idx){

@@ -1,6 +1,5 @@
 import constant from "../../constant/constant.js";
-import FormFactory from "../Form/FormFactory.js";
-import ModalWithForm from "../Modal/ModalWithForm.js";
+
 import prepareFormGraphic from "../utils/prepareFormGraphic.js";
 
 //rename to PAGE maybe singleton? because can use without extends Page class
@@ -13,40 +12,14 @@ import prepareFormGraphic from "../utils/prepareFormGraphic.js";
 //Class Canvas panel !!!!
 //Class canvas only contains draw methods other methods include cavnas panel!!!
 
-export class Canvas {
-    #callbacks;
+class Canvas {
     constructor(modal) {
         this.canvas = new fabric.Canvas('page');
         this.canvas.selection = false;
         this.modal = modal;
         this.copiedElement = null;
-
-        this.saveAsImageButton = document.querySelector('.save-as-image');
-        this.saveAsJsonButton = document.querySelector('.save-as-json');
-        this.addGraphicButton = document.querySelector('.btn-add-graphic');
-
-        this.deleteElementButton = document.querySelector('.delete-button');
-        this.imageLoaderButton = document.querySelector('.image-loader-button');
-        this.copyElementButton = document.querySelector('.copy-element');
-        this.pasteElementButton = document.querySelector('.paste-element');
-
-        this.canvasSchema = document.querySelector('.manage-canvas-schema');
-
-        this.saveAsImageButton.addEventListener('click', this.#saveAsImage);
-        this.saveAsJsonButton.addEventListener('click', this.saveAsJSON);
-
-        this.canvasSchema.addEventListener('click', this.#detectTypeModal)
         this.#onModalSubmit();
-
-        this.deleteElementButton.addEventListener('click', this.#deleteElement);
-        this.imageLoaderButton.addEventListener('change', this.#uploadImage);
-        this.copyElementButton.addEventListener('click', this.#copyElement);
-        this.pasteElementButton.addEventListener('click', this.#pasteElement)
         window.addEventListener('keydown', this.#keyPress)
-
-        // this.addGraphic();
-        // this.addList({texts: ['Прописали теги alt на всех страницах «Базы знаний» и блога', 'Подобрали семантику и оптимизировали статью по монетизации мобильных игр', `Подготовили файлы с распределением запросов по страницам сайта и тегами title и description: https://docs.google.com/spreadsheets/d/1u4bVXjlaLP5DPRHDJl6NyJeAb2AI6GT9507koKNtWE8/edit?usp=sharing https://docs.google.com/spreadsheets/d/1a61hboAqDnfvcCHthUa9BcJBZMblCBlirjeTHz_j86M/edit?usp=sharing
-        // ` ], left: 40, top: 200, startNumber: 2, marked: true});
     }
 
 
@@ -105,7 +78,7 @@ export class Canvas {
 
     //CALLBACK
 
-    #copyElement = (e) => {
+    copyElement = (e) => {
         const activeElement = this.canvas.getActiveObject();
         if(!activeElement) return
         console.log(this.canvas.getActiveObject())
@@ -186,7 +159,7 @@ export class Canvas {
         //pass textAlign for column
     }
 // Canvas-panel
-    #detectTypeModal = (e) => {
+    detectTypeModal = (e) => {
         const target = e.target;
         if(!target.classList.contains('btn')) return;
         this.modal.open();
@@ -296,20 +269,20 @@ export class Canvas {
         this.canvas.sendToBack(OY)
     }
 
-    #pasteElement = (e) => {
+    pasteElement = (e) => {
         if(!this.copiedElement) return
         this.copiedElement.set('top',  this.copiedElement.top + 5)
         this.copiedElement.set('left',  this.copiedElement.left + 5)
         this.canvas.add(this.copiedElement);
         this.canvas.setActiveObject(this.copiedElement);
-        this.#copyElement();
+        this.copyElement();
     }
 
-    #deleteElement = () => {
+    deleteElement = () => {
         this.canvas.remove(this.canvas.getActiveObject());
     }
 
-    #saveAsImage = (e) => {
+    saveAsImage = (e) => {
         const link = e.target;
         link.href = this.canvas.toDataURL({
             format: 'png',
@@ -318,7 +291,7 @@ export class Canvas {
         link.download = 'canvas.png'
     }
 
-    #uploadImage = (e) => {
+    uploadImage = (e) => {
         const reader = new FileReader();
         reader.onload = (event) => {
             const imageInstance = new Image();
@@ -338,13 +311,13 @@ export class Canvas {
 
     #keyPress = (e) => {
         if(e.keyCode === 46) {
-            this.#deleteElement();
+            this.deleteElement();
         }
         if(e.ctrlKey && e.keyCode === 67) {
-            this.#copyElement();
+            this.copyElement();
         }
         if(e.ctrlKey && e.keyCode === 86) {
-            this.#pasteElement();
+            this.pasteElement();
         }
     }
 //https://stackoverflow.com/questions/51434198/include-image-data-in-json-fabricjs
@@ -369,8 +342,5 @@ export class Canvas {
 }
 //Move modal to canvas panel !!!
 //Canvas only draw !!!
-const canvasCreator = new Canvas(new ModalWithForm({
-    modal: '#modal',
-    active: 'modal-open'
-}, FormFactory));
-export default canvasCreator;
+
+export default Canvas;

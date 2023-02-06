@@ -2,8 +2,9 @@ import FormHTML from "./Form.js";
 
 class FormTable extends FormHTML {
     #prevCount = 0;
-    constructor() {
+    constructor(repeater) {
         super();
+        this.repeater = repeater;
         this.default = {
             inputs:  [ {
                 type: 'number',
@@ -32,6 +33,7 @@ class FormTable extends FormHTML {
         }
         this.addContentForm(this.default)
         this.#getCountElem();
+        this.#addRepeaterToForm({inputs: [{type: 'text', text: 'Месяц'}, { type: 'number', text: 'Посетители'}]})
     }
 
     #getCountElem() {
@@ -67,6 +69,10 @@ class FormTable extends FormHTML {
 
     #addInputForColumn(inputs) {
         inputs.forEach(this._addElementForForm)
+    }
+
+    #addRepeaterToForm(opt) {
+        this.form.insertAdjacentHTML('beforeend', this.repeater.createField(opt))
     }
 
     // _destroy() {
