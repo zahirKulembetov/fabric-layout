@@ -13,10 +13,11 @@
     display: none;
     background-color: white;
     border-radius: 10px;
-    min-height: 500px;
-    min-width: 500px;
+    min-height: 30rem;
+    max-height: 30rem;
+    min-width: 30rem;
     box-shadow: 4px 4px 56px 0px rgba(34, 60, 80, 0.2);
-    padding: 15px;
+    padding: 1rem;
 }
 
 .modal-open {
@@ -28,5 +29,8 @@
 }
 
 .modal .modal-body {
+}
 
+.modal {
+    overflow-y: auto;
 }

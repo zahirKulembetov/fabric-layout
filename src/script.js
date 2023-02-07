@@ -4,6 +4,7 @@ import setImageToSlide from "./class/utils/imageSlide.js";
 import changeOrderArray from "./class/utils/changeOrderArray.js";
 import report from "./class/Report/index.js";
 import slider from "./class/Slider/index.js";
+import keyEvents from "./class/Listeners/keyEvents.js";
 
 document.addEventListener('DOMContentLoaded', () => {
 

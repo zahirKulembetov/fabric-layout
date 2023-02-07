@@ -26,12 +26,12 @@ class Repeater {
         }
     }
 
-    _createInputs(inputs) {
+    _createInputs = (inputs) => {
         let html = "<div class='repeater-inputs-container'>";
         inputs.forEach(({type, text}, idx) => html+=`
             <div class='repeater-input-container'>
-                <label>${text}</label>
-                <input type="${type}"/>
+                <label id="repeater-field-${this.idx}-${idx}">${text}</label>
+                <input id="repeater-field-${this.idx}-${idx}" type="${type}" name="repeater-field-${this.idx}-${idx}"/>
             </div>
         ` )
         html+="</div>"

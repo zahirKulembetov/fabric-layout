@@ -28,7 +28,7 @@ class FormHTML {
                 <label for='${id}'>${text}</label>
                 <input id='${id}' type='${type}' name='${name}' min='${min}' max='${max}'/> 
             </div>`;
-        this.form.insertAdjacentHTML("beforeend", input);
+        this.form.insertAdjacentHTML("afterbegin", input);
     }
 
     #addButton() {
@@ -41,6 +41,14 @@ class FormHTML {
 
     getForm() {
         return this.form;
+    }
+
+    _setTypeForm(type) {
+        const input = document.createElement('input');
+        input.setAttribute('hidden', true);
+        input.setAttribute('name', 'type');
+        input.value = type;
+        this.form.insertAdjacentElement('beforeend', input);
     }
 
     _destroy() {

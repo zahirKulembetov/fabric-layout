@@ -1,6 +1,7 @@
 import constant from "../../constant/constant.js";
 
 import prepareFormGraphic from "../utils/prepareFormGraphic.js";
+import prepareFormTable from "../utils/prepareFormTable.js";
 
 //rename to PAGE maybe singleton? because can use without extends Page class
 
@@ -19,14 +20,13 @@ class Canvas {
         this.modal = modal;
         this.copiedElement = null;
         this.#onModalSubmit();
-        window.addEventListener('keydown', this.#keyPress)
     }
 
 
 
-    addText(options) {
-        const {text, left, top, fill, fontSize, textAlign, width, height, angle = 0} = options;
-        const textForCanvas = new fabric.Textbox(text, {left, top, fill: fill ?? '#000', fontSize: fontSize ?? 16, textAlign: textAlign ?? 'left', width: width ?? 1360, angle});
+    addText = (options) => {
+        const {text = 'Text', left = 40, top = 40, fill = "#000", fontSize = 16, textAlign = 'left', width = 1360, height, angle = 0} = options;
+        const textForCanvas = new fabric.Textbox(text, {left, top, fill, fontSize, textAlign: textAlign, width, angle});
         this.canvas.add(textForCanvas);
         return this;
     }
@@ -74,6 +74,26 @@ class Canvas {
             format: 'png',
             quality: 1
         })
+    }
+
+    setColor = (e) => {
+        const activeElement = this.canvas.getActiveObject();
+        if(!activeElement) return
+        if(activeElement.text) {
+            return activeElement.set('fill', e.target.value)
+        }
+        activeElement.set('stroke', e.target.value)
+        // console.log(activeElement.fill, activeElement.stroke)
+        // console.log(e.target.value)
+    }
+
+    setFontSize = (e) => {
+        const activeElement = this.canvas.getActiveObject();
+        if(!activeElement) return
+        if(activeElement.text) {
+            console.log(activeElement, e.target.value)
+            activeElement.set('fontSize', e.target.value)
+        }
     }
 
     //CALLBACK
@@ -130,8 +150,10 @@ class Canvas {
 
     #addRow(options) {
         const {percentMainColumn, rows} = options;
+        const countColumn = rows[0].texts.length;
+        console.log(countColumn)
         //percent only first column for next columns -> (100 - percent) / (countcolumns - 1)
-        const percentOtherColumns = (100 - percentMainColumn) / 2;
+        const percentOtherColumns = (100 - percentMainColumn) / (countColumn - 1);
         const startTop = 130;
         const defaultHeight = 45;
 
@@ -169,7 +191,16 @@ class Canvas {
 
     #onModalSubmit() {
         this.modal.onSubmit( form => {
-            this.addGraphic(prepareFormGraphic(form))
+            this.clear(); //clear canvas before add
+            // Clear element by type 
+            // Need set type to canvas element
+            if(form.type === 'table') {
+                this.addTable(prepareFormTable(form))
+            }
+            if(form.type === 'graphic') {
+                this.addGraphic(prepareFormGraphic(form))
+            }
+           
         })
     }
 // Canvas-panel
@@ -309,17 +340,7 @@ class Canvas {
         reader.readAsDataURL(e.target.files[0]);
     }
 
-    #keyPress = (e) => {
-        if(e.keyCode === 46) {
-            this.deleteElement();
-        }
-        if(e.ctrlKey && e.keyCode === 67) {
-            this.copyElement();
-        }
-        if(e.ctrlKey && e.keyCode === 86) {
-            this.pasteElement();
-        }
-    }
+    
 //https://stackoverflow.com/questions/51434198/include-image-data-in-json-fabricjs
     saveAsJSON = () => {
         console.log(this.canvas.getObjects())

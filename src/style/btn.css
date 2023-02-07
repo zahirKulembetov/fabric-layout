@@ -1,7 +1,7 @@
 .btn {
-    padding: 10px;
+    padding: 1rem;
     outline: none;
-    border: 1px solid black;
+    border: 0.1rem solid black;
     background-color: transparent;
     cursor: pointer;
     transition: all 0.2s ease;

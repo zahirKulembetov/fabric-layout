@@ -9,12 +9,12 @@
 }
 
 .content {
-    padding: 20px 0px;
+    padding: 1rem 0em;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 30px;
+    gap: 2rem;
 }
 
 body > .modal-open {

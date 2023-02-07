@@ -1,11 +1,18 @@
-export default (form) => {
-    const {count, max} = form;
-    const result = { count, max, columns: [] };
+import getMaxFromRepeater from '../utils/getMaxFromRepeater.js'
 
-    for(let i = 0; i < +count; i++) {
-        const date = form[`month-${i}`];
-        const value = form[`counts-${i}`];
-        result['columns'].push({value, date})
+export default (form) => {
+    const {max} = form;
+    const result = { max: +max, columns: [] };
+    const [rows, columns] = getMaxFromRepeater(form);
+    for(let i = 0; i <= rows; i++) {
+        for(let j = 0; j <= columns; j++) {
+            +j++; //skip
+            const date = form[`repeater-field-${i}-${j}`];
+            const value = form[`repeater-field-${i}-${+j++}`];
+            result['columns'].push({value, date})
+        }
     }
+    result['count'] = rows + 1;
     return result;
 }
+
